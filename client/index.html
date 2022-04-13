@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Two Player Hangman</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Two Player Hangman!</h1>
+
+<div id="game-wrapper">
+    <div id="player-1-div" class="player-div">
+        <canvas id="player-1-canvas" class="hangman-canvas"></canvas>
+        <p>Player 1</p>
+        <span id="player-1-turn"></span>
+    </div>
+    <div id="shared">
+
+
+        <div id="shared-keyboard-div">
+            <div id="row-1" class="row">
+                <div id="key-Q" class="key"><span class="noselect">Q</span></div>
+                <div id="key-W" class="key"><span class="noselect">W</span></div>
+                <div id="key-E" class="key"><span class="noselect">E</span></div>
+                <div id="key-R" class="key"><span class="noselect">R</span></div>
+                <div id="key-T" class="key"><span class="noselect">T</span></div>
+                <div id="key-Y" class="key"><span class="noselect">Y</span></div>
+                <div id="key-U" class="key"><span class="noselect">U</span></div>
+                <div id="key-I" class="key"><span class="noselect">I</span></div>
+                <div id="key-O" class="key"><span class="noselect">O</span></div>
+                <div id="key-P" class="key"><span class="noselect">P</span></div>
+            </div>
+            <div id="row-2" class="row">
+                <div id="key-A" class="key"><span class="noselect">A</span></div>
+                <div id="key-S" class="key"><span class="noselect">S</span></div>
+                <div id="key-D" class="key"><span class="noselect">D</span></div>
+                <div id="key-F" class="key"><span class="noselect">F</span></div>
+                <div id="key-G" class="key"><span class="noselect">G</span></div>
+                <div id="key-H" class="key"><span class="noselect">H</span></div>
+                <div id="key-J" class="key"><span class="noselect">J</span></div>
+                <div id="key-K" class="key"><span class="noselect">K</span></div>
+                <div id="key-L" class="key"><span class="noselect">L</span></div>
+            </div>
+            <div id="row-3" class="row">
+                <div id="key-Z" class="key"><span class="noselect">Z</span></div>
+                <div id="key-X" class="key"><span class="noselect">X</span></div>
+                <div id="key-C" class="key"><span class="noselect">C</span></div>
+                <div id="key-V" class="key"><span class="noselect">V</span></div>
+                <div id="key-B" class="key"><span class="noselect">B</span></div>
+                <div id="key-N" class="key"><span class="noselect">N</span></div>
+                <div id="key-M" class="key"><span class="noselect">M</span></div>
+            </div>
+            
+        </div>
+
+
+        <div id="shared-word-div"><span id='guessed-word' class="noselect">______</span></div>
+    </div>
+    <div id="player-2-div" class="player-div">
+        <canvas id="player-2-canvas" class="hangman-canvas"></canvas>
+        <p>Player 2</p>
+        <span id="player-2-turn"></span>
+    </div>
+</div>
+
+<script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
+<script src="index.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h1 {
+    text-align: center;
+}
+
+#game-wrapper {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    margin-left: 2vw;
+    margin-right: 2vw;
+}
+
+/* div {
+    border: 1px solid red;
+} */
+
+#shared-keyboard {
+    display: flex;
+    align-content: center;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+.key {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: lightslategray;
+    color: white;
+    border-radius: 10%;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 2.5vw;
+    margin: 0.2vw;
+    width: 3vw;
+    height: 3vw;
+    cursor: pointer;
+}
+
+.key.player1 {
+    background-color: orange;
+    color: white;
+}
+
+.key.player2 {
+    background-color: blue;
+    color: white;
+}
+
+
+#shared-word-div {
+    margin-top: 10vh;
+}
+
+#guessed-word {
+    display: flex;
+    justify-content: center;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 3vw;
+    letter-spacing: 0.5em;
+    font-weight: 400;
+}
+
+/* Get rid of text selection */
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+}
