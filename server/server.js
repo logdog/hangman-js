@@ -1,4 +1,5 @@
-// const { createGameState } = require('./game')
+const { createGameState, processGuess, checkWordIsCorrect,  updateCorrectWord, checkWinner} = require('./game');
+
 
 
 const httpServer = require("http").createServer();
@@ -12,7 +13,27 @@ const io = require("socket.io")(httpServer, {
 io.listen(3000);
 
 io.on('connection', client => {
-    client.emit('init', { data: 'hello world'});
+
+    // create then game state. Send to player
+    state = createGameState();
+    client.emit('gameState', JSON.stringify(state));
+    
+    // main code loop
+    client.on('keyDown', (keyCode) => {
+        state = processGuess(keyCode.toUpperCase(), state);
+        if (checkWordIsCorrect(state)) {
+            state = updateCorrectWord(state);
+        }
+        else if (checkWinner(state) == 0) {
+
+        }
+        else if (checkWinner(state) == 1) {
+            // player 1 wins
+        }
+        else if (checkWinner(state) == 2) {
+            // player 2 wins
+        }
+
+        client.emit('gameState', JSON.stringify(state));
+    });
 });
-
-

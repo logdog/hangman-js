@@ -1,28 +1,3 @@
-console.log('hello')
-
-gameState = {
-    correctWord: 'BANANA',
-    guessedWord: 'BA_A_A',
-    player1: {
-        guesses: [
-            {letter: 'A', correct: true},
-            {letter: 'S', correct: false},
-            {letter: 'D', correct: false},
-            {letter: 'X', correct: false},
-        ],
-        mistakes: 13,
-    },
-    player2: {
-        guesses: [
-            {letter: 'B', correct: true},
-            {letter: 'Q', correct: false},
-            {letter: 'T', correct: false},
-        ],
-        mistakes: 12,
-    },
-    turn: 1
-};
-
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const canvas1 = document.getElementById('player-1-canvas');
 const canvas2 = document.getElementById('player-2-canvas');
@@ -30,29 +5,17 @@ const ctx1 = canvas1.getContext('2d');
 const ctx2 = canvas2.getContext('2d');
 
 const socket = io('http://localhost:3000');
-socket.on('init', handleInit);
 socket.on('gameState', handleGameState);
 
 // player 1
 var myPlayerID = 1;
 
-// for now, just toggle between the three colors
-function keyClicked() {
+function keyDown(e) {
+    socket.emit('keyDown', e.key)
+}
 
-    if (gameState.turn !== myPlayerID) {
-        return;
-    }
-
-    if (this.classList.contains('player1') || this.classList.contains('player2')) {
-        return;
-    }
-
-    if (myPlayerID == 1) {
-        this.classList.add('player1');
-    } 
-    else if (myPlayerID == 2){
-        this.classList.add('player2');
-    }
+function keyClick() {
+    socket.emit('keyDown', this.id.split('-')[1]);
 }
 
 function paintHangman(canvas, ctx, mistakes, color) {
@@ -154,13 +117,18 @@ function paintHangman(canvas, ctx, mistakes, color) {
 
 function paintGame(state) {
     // update the keyboard
+    for (let obj of document.getElementsByClassName('key')) {
+        obj.classList.remove('player1');
+        obj.classList.remove('player2');
+    }
+    
     for (let guess of state.player1.guesses) {
         document.getElementById(`key-${guess.letter}`).classList.add('player1');
-        document.getElementById(`key-${guess.letter}`).removeEventListener('click', keyClicked);
+        document.getElementById(`key-${guess.letter}`).removeEventListener('click', keyClick);
     }
     for (let guess of state.player2.guesses) {
         document.getElementById(`key-${guess.letter}`).classList.add('player2');
-        document.getElementById(`key-${guess.letter}`).removeEventListener('click', keyClicked);
+        document.getElementById(`key-${guess.letter}`).removeEventListener('click', keyClick);
     }
 
     // update the dislayed guessed word
@@ -169,13 +137,26 @@ function paintGame(state) {
     // paint the hangmen
     paintHangman(canvas1, ctx1, state.player1.mistakes, 'orange');
     paintHangman(canvas2, ctx2, state.player2.mistakes, 'blue');
+
+    // turn indicator
+    if (state.turn == 1) {
+        document.getElementById('player-1-turn').style.display = 'block';
+        document.getElementById('player-2-turn').style.display = 'none';
+    }
+    else if (state.turn == 2) {
+        document.getElementById('player-1-turn').style.display = 'none';
+        document.getElementById('player-2-turn').style.display = 'block';
+    }
 }
 
 function init() {
     // add click listeners for the keyboard
     for (let letter of alphabet) {
-        document.getElementById(`key-${letter}`).addEventListener('click', keyClicked);
+        document.getElementById(`key-${letter}`).addEventListener('click', keyClick);
     }
+
+    // add key listeners
+    document.addEventListener('keydown', keyDown);
 
     canvas1.width = canvas1.height = 25 * window.innerWidth / 100;
     canvas2.width = canvas2.height = 25 * window.innerWidth / 100;
@@ -184,22 +165,15 @@ function init() {
     window.addEventListener("resize", () => {
         canvas1.width = canvas1.height = 25 * window.innerWidth / 100;
         canvas2.width = canvas2.height = 25 * window.innerWidth / 100;
-        paintGame(gameState);
-        console.log('resize')
     });
-
-    // paintGame(gameState);
 }
 
 init();
-
-function handleInit(msg) {
-    console.log(msg)
-}
 
 function handleGameState(gameState) {
     gameState = JSON.parse(gameState);
     requestAnimationFrame(() => {
         paintGame(gameState);
+        // console.log(gameState);
     });
 }
