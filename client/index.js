@@ -34,10 +34,12 @@ lastState = null;
 var myPlayerID = 1;
 
 function keyDown(e) {
+    console.log('key down', e.key)
     socket.emit('keyDown', e.key)
 }
 
 function keyClick() {
+    console.log('key click')
     socket.emit('keyDown', this.id.split('-')[1]);
 }
 
@@ -238,7 +240,13 @@ function handleGameState(gameState) {
 
 function handleGameOver(msg) {
     console.log('game over')
-    alert(msg);
+    if (msg === myPlayerID) {
+        alert('You Win');
+    }
+    else if (msg !== myPlayerID) {
+        alert('You Lose');
+    }
+    console.log(msg)
 }
 
 function handleunknownGame(msg) {

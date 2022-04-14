@@ -44,10 +44,6 @@ io.on('connection', client => {
             numClients = connectedPlayersInRoom.size;
         }
 
-        console.log('bleh.')
-        console.log(connectedPlayersInRoom)
-        console.log(numClients)
-
         if (numClients === 0) {
             console.log('unknownGame')
             client.emit('unknownGame');
@@ -71,10 +67,9 @@ io.on('connection', client => {
 
     function handleKeyDown(keyCode) {
         console.log('handleKeyDown()')
-        console.log(keyCode)
 
         var gameCode = clientRooms[client.id];
-        console.log(gameCode)
+
         if (!gameCode) {
             return;
         }
@@ -83,7 +78,6 @@ io.on('connection', client => {
             return;
         }
 
-        console.log('game has started and key was pressed')
         updateGame(keyCode, gameCode);
     }
 
@@ -94,55 +88,34 @@ io.on('connection', client => {
     }
 
     function updateGame(keyCode, gameCode) {
-        console.log(client.id)
-        console.log(state[gameCode])
+        console.log('updateGame()')
 
-        if(client.id === state[gameCode].player1.id) {
-            console.log('it was player 1')
+        if(client.id !== state[gameCode].player1.id && client.id !== state[gameCode].player2.id) {
+            return;
         }
-        else if (client.id === state[gameCode].player2.id) {
-            console.log('it was player 2')
+
+        if(client.id === state[gameCode].player1.id && state[gameCode].turn !== 1) {
+            return;
         }
+        else if (client.id === state[gameCode].player2.id && state[gameCode].turn !== 2) {
+            return;
+        }
+
+        // game logic
+        state[gameCode] = processGuess(keyCode, state[gameCode]);
+
+        if (checkWordIsCorrect(state[gameCode])) {
+            state[gameCode] = updateCorrectWord(state[gameCode]);
+        }
+
+        io.to(gameCode).emit('gameState', JSON.stringify(state[gameCode]));
+
+        var winner = checkWinner(state[gameCode]);
+        if (winner !== 0) {
+            io.to(gameCode).emit('gameOver', winner);
+        }
+        
     }
 
-        // // add listeners
-        // let allUsers = room.sockets;
-        // var player1 = allUsers[0];
-        // var player2 = allUsers[1];
-
-        // console.log(player1)
-        // console.log(player2)
-
-        // player1.on('keyDown', (keyCode) => {
-        //     onKeyDown(client, keyCode)
-        // });
-        // player2.on('keyDown', (keyCode) => {
-        //     onKeyDown(client, keyCode)
-        // });
-    
-
-    //     function onKeyDown(player, keyCode) {
-
-    //         // TODO: check that the player didn't skip a turn
-    //         console.log('keydown()')
-    //         console.log(player == player1, player == player2, state.turn)
-    //         if (player == player1 && state.turn !== 1) {
-    //             console.log('bad 1')
-    //             return;
-    //         }
-    //         if (player == player2 && state.turn !== 2) {
-    //             console.log('bad 2')
-    //             return;
-    //         }
-    //         console.log('yay')
-
-            
-
-
-    //     // start the game
-    //     player1.emit('gameState', JSON.stringify(state));
-    //     player2.emit('gameState', JSON.stringify(state));
-
-    // }
 
 });

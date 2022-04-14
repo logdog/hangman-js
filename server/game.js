@@ -46,6 +46,7 @@ function createGameState() {
 
 function processGuess(key, state) {
     // check if key is a valid character
+    key = key.toUpperCase();
     if (!(key >= 'A' &&  key <= 'Z')) {
         return state;
     }
