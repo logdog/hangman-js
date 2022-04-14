@@ -27,13 +27,20 @@ function createGameState() {
         player1: {
             guesses: [],
             mistakes: 0,
+            name: 'Player 1',
+            color: 'orange',
+            id: ''
         },
         player2: {
             guesses: [],
             mistakes: 0,
+            name: 'Player 2',
+            color: 'blue',
+            id: ''
         },
         turn: 1,
-        previousWords: []
+        previousWords: [],
+        started: false
     };
 }
 
@@ -99,7 +106,6 @@ function processGuess(key, state) {
 }
 
 function checkWordIsCorrect(state) {
-    console.log(state.correctWord, state.guessedWord)
     if (state.correctWord === state.guessedWord) {
         return true;
     }

@@ -9,13 +9,35 @@
 
 <h1>Two Player Hangman!</h1>
 
-<div id="game-wrapper">
+<div id="room-wrapper">
+
+    <div id="screen-1">
+        <button id="new-game-btn">New Game</button>
+        <span>or</span>
+        <div id="enter-code-div">
+            <input  id="enter-code-input" placeholder="Enter Room Code" >
+            <button id="go-btn">GO</button>
+        </div>
+        
+    </div>
+
+    <div id="screen-2" style="display: none">
+        <span id="screen-2-message">
+            Send room code to your friend!
+        </span>
+        <span id="screen-2-code">
+            547
+        </span>
+    </div>
+
+</div>
+
+<div id="game-wrapper" style="display: none">
     <div id="player-1-div" class="player-div">
         <canvas id="player-1-canvas" class="hangman-canvas"></canvas>
-        <span id="player-1-turn" style="display: none">Player 1</span>
+        <span id="player-1-turn" class="turn-indicator"></span>
     </div>
     <div id="shared">
-
 
         <div id="shared-keyboard-div">
             <div id="row-1" class="row">
@@ -54,11 +76,14 @@
         </div>
 
 
-        <div id="shared-word-div"><span id='guessed-word' class="noselect">______</span></div>
+        <div id="shared-word-div">
+            <span id='guessed-word' class="noselect word"></span>
+            <span id='prev-word' class="noselect word"></span>
+        </div>
     </div>
     <div id="player-2-div" class="player-div">
         <canvas id="player-2-canvas" class="hangman-canvas"></canvas>
-        <span id="player-2-turn" style="display: none">Player 2</span>
+        <span id="player-2-turn" class="turn-indicator"></span>
     </div>
 </div>
 
