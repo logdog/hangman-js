@@ -9,12 +9,19 @@ const { Server } = require("socket.io");
 
 const io = new Server(server, {
     cors: {
-      origin: "http://127.0.0.1:8080"
+      origin: "http://127.0.0.1:3000"
     }
 });
 
+app.get('/hi', (req, res) => {
+    console.log('hi')
+    res.sendFile(__dirname + '/public/hi.html');
+});
+
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+    console.log(__dirname + '/public/hi.html')
+    // how do we send javascript, css as well?
+    res.sendFile(__dirname + '/public/index.html');
 });
 
 io.on('connection', (socket) => {
