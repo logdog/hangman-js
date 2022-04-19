@@ -4,6 +4,9 @@ const canvas2 = document.getElementById('player-2-canvas');
 const ctx1 = canvas1.getContext('2d');
 const ctx2 = canvas2.getContext('2d');
 
+const whoAmI = document.getElementById('whoAmI');
+const player1LastGuessSpan = document.getElementById('player-1-last-guess');
+const player2LastGuessSpan = document.getElementById('player-2-last-guess');
 const player1TurnSpan = document.getElementById('player-1-turn');
 const player2TurnSpan = document.getElementById('player-2-turn');
 
@@ -16,7 +19,18 @@ const screen2Code = document.getElementById('screen-2-code');
 const gameWrapper = document.getElementById('game-wrapper');
 
 const prevWordSpan = document.getElementById('prev-word');
-const guessedWordSpan = document.getElementById('guessed-word')
+const guessedWordSpan = document.getElementById('guessed-word');
+
+const playAgainDiv = document.getElementById('play-again-div');
+const gameOverSpan = document.getElementById('game-over');
+const playAgainButton = document.getElementById('play-again-btn');
+
+
+let keySpans = {};
+for (const letter of alphabet) {
+    keySpans[letter] = document.getElementById(`key-${letter}`);
+}
+
 
 const socket = io('http://localhost:3000');
 
@@ -148,8 +162,14 @@ function paintGame(state) {
 
     screen1.style.display = 'none';
     screen2.style.display = 'none';
+    whoAmI.style.display = 'flex';
     gameWrapper.style.display = 'flex';
 
+    if (!whoAmI.innerHTML) {
+        whoAmI.innerHTML = `You are player ${myPlayerID}`;
+        whoAmI.classList.add(`player${myPlayerID}`);
+    }
+    
     // update the keyboard
     for (let obj of document.getElementsByClassName('key')) {
         obj.classList.remove('player1');
@@ -158,19 +178,28 @@ function paintGame(state) {
     
     if (state.player1.guesses.length > 0) {
         for (let guess of state.player1.guesses) {
-            document.getElementById(`key-${guess.letter}`).classList.add('player1');
+            keySpans[guess.letter].classList.add('player1');
         }
     }
     
     if (state.player2.guesses.length > 0) {
         for (let guess of state.player2.guesses) {
-            document.getElementById(`key-${guess.letter}`).classList.add('player2');
+            keySpans[guess.letter].classList.add('player2');
         }
     }
 
     // update the dislayed guessed word
     guessedWordSpan.innerHTML = state.guessedWord;
 
+    // // display the previous guess, do animation
+    if (state.turn === 1 && state.player2.guesses.length > 0) {
+        const guess = state.player2.guesses[state.player2.guesses.length-1].letter;
+        player2LastGuessSpan.innerHTML = guess;
+    }
+    else if (state.turn === 2 && state.player1.guesses.length > 0) {
+        const guess = state.player1.guesses[state.player1.guesses.length-1].letter;
+        player1LastGuessSpan.innerHTML = guess;
+    }
     // paint the hangmen
     paintHangman(canvas1, ctx1, state.player1.mistakes, state.player1.color);
     paintHangman(canvas2, ctx2, state.player2.mistakes, state.player2.color);
@@ -193,6 +222,7 @@ function paintGame(state) {
     if (state.previousWords.length > 0) {
         prevWordSpan.innerHTML = state.previousWords[state.previousWords.length-1];
     }
+
     console.log(state.correctWord)
 }
 
@@ -206,6 +236,10 @@ function init() {
     goButton.addEventListener('click', () => {
         var code = enterCodeInput.value;
         socket.emit('joinGame', code);
+    });
+
+    playAgainButton.addEventListener('click', () => {
+        socket.emit('playAgain');
     });
 
     // add key listeners
@@ -239,14 +273,15 @@ function handleGameState(gameState) {
 }
 
 function handleGameOver(msg) {
-    console.log('game over')
+    playAgainDiv.style.display = 'flex';
     if (msg === myPlayerID) {
-        alert('You Win');
+        gameOverSpan.innerHTML = 'You Win!';
+        gameOverSpan.classList = 'winner';
     }
     else if (msg !== myPlayerID) {
-        alert('You Lose');
+        gameOverSpan.innerHTML = 'You Lose';
+        gameOverSpan.classList = 'loser';
     }
-    console.log(msg)
 }
 
 function handleunknownGame(msg) {
