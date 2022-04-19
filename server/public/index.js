@@ -160,9 +160,18 @@ function paintGame(state) {
         return;
     }
 
+    // if game is playing
+    console.log(state)
+    if (state.started) {
+        playAgainDiv.style.display = 'none';
+    } else {
+        playAgainDiv.style.display = 'flex';
+    }
+
     screen1.style.display = 'none';
     screen2.style.display = 'none';
     whoAmI.style.display = 'flex';
+    
     gameWrapper.style.display = 'flex';
 
     if (!whoAmI.innerHTML) {
@@ -205,8 +214,15 @@ function paintGame(state) {
     paintHangman(canvas2, ctx2, state.player2.mistakes, state.player2.color);
 
     // player names
-    player1TurnSpan.innerHTML = state.player1.name;
-    player2TurnSpan.innerHTML = state.player2.name;
+    if (state.player1.wins > 0 || state.player1.losses > 0) {
+        player1TurnSpan.innerHTML = `${state.player1.name} (${state.player1.wins}-${state.player1.losses})`;
+        player2TurnSpan.innerHTML = `${state.player2.name} (${state.player2.wins}-${state.player2.losses})`;
+    }
+    else {
+        player1TurnSpan.innerHTML = state.player1.name;
+        player2TurnSpan.innerHTML = state.player2.name;
+    }
+    
 
     // turn indicator
     if (state.turn == 1) {
@@ -273,7 +289,6 @@ function handleGameState(gameState) {
 }
 
 function handleGameOver(msg) {
-    playAgainDiv.style.display = 'flex';
     if (msg === myPlayerID) {
         gameOverSpan.innerHTML = 'You Win!';
         gameOverSpan.classList = 'winner';

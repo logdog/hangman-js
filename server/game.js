@@ -3,6 +3,7 @@ const fs = require('fs');
 let words;
 
 const MAX_MISTAKES = 11;
+// const MAX_MISTAKES = 2;
 
 try {
   words = fs.readFileSync('./words.txt', 'utf8').split('\r\n');
@@ -15,7 +16,8 @@ module.exports = {
     processGuess,
     checkWordIsCorrect,
     updateCorrectWord,
-    checkWinner
+    checkWinner,
+    newGame,
 }
 
 
@@ -29,6 +31,8 @@ function createGameState() {
             mistakes: 0,
             name: 'Player 1',
             color: 'orange',
+            wins: 0,
+            losses: 0,
             id: ''
         },
         player2: {
@@ -36,11 +40,13 @@ function createGameState() {
             mistakes: 0,
             name: 'Player 2',
             color: 'blue',
+            wins: 0,
+            losses: 0,
             id: ''
         },
         turn: 1,
         previousWords: [],
-        started: false
+        started: false,
     };
 }
 
@@ -151,4 +157,11 @@ function checkWinner(state) {
         return 1; // player 1 wins
     }
     return 0; // no winner yet
+}
+
+function newGame(state) {
+    updateCorrectWord(state);
+    state.player1.mistakes = 0;
+    state.player2.mistakes = 0;
+    return state;
 }

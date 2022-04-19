@@ -1,4 +1,4 @@
-const { createGameState, processGuess, checkWordIsCorrect,  updateCorrectWord, checkWinner} = require('./game');
+const { createGameState, processGuess, checkWordIsCorrect,  updateCorrectWord, checkWinner, newGame} = require('./game');
 const { makeid } = require('./utils');
 
 const express = require('express');
@@ -32,6 +32,7 @@ io.on('connection', client => {
     client.on('newGame', handleNewGame);
     client.on('joinGame', handleJoinGame);
     client.on('keyDown', handleKeyDown);
+    client.on('playAgain', handlePlayAgain);
 
     function handleNewGame() {
         console.log('handleNewGame()')
@@ -94,6 +95,26 @@ io.on('connection', client => {
         updateGame(keyCode, gameCode);
     }
 
+    function handlePlayAgain() {
+        console.log('playAgain()')
+
+        console.log('1()')
+        var gameCode = clientRooms[client.id];
+        if (!gameCode) {
+            return;
+        }
+
+        console.log('2()')
+        if (state[gameCode].started) {
+            return;
+        }
+
+        console.log('newGame()')
+        state[gameCode] = newGame(state[gameCode]);
+        state[gameCode].started = true;
+        io.to(gameCode).emit('gameState', JSON.stringify(state[gameCode]));
+    }
+
     function startGame(gameCode) {
         console.log('startGame()')
         state[gameCode].started = true;
@@ -126,6 +147,19 @@ io.on('connection', client => {
         var winner = checkWinner(state[gameCode]);
         if (winner !== 0) {
             io.to(gameCode).emit('gameOver', winner);
+
+            state[gameCode].started = false; // no more key-downs
+            if (winner === 1) {
+                state[gameCode].player1.wins++;
+                state[gameCode].player2.losses++;
+            }
+            else if (winner === 2) {
+                state[gameCode].player2.wins++;
+                state[gameCode].player1.losses++;
+            }
+
+            state[gameCode].previousWords.push(state[gameCode].correctWord);
+            io.to(gameCode).emit('gameState', JSON.stringify(state[gameCode]));
         }
         
     }
