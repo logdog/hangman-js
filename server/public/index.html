@@ -8,6 +8,7 @@
 <body>
 
 <h1>Two Player Hangman!</h1>
+<h2 style="display: none" id="whoAmI"></h2>
 
 <div id="room-wrapper">
 
@@ -36,6 +37,9 @@
     <div id="player-1-div" class="player-div">
         <canvas id="player-1-canvas" class="hangman-canvas"></canvas>
         <span id="player-1-turn" class="turn-indicator"></span>
+        <div class="last-guess-div">
+            <span id="player-1-last-guess" class="noselect last-guess player1"></span>
+        </div>
     </div>
     <div id="shared">
 
@@ -80,10 +84,17 @@
             <span id='guessed-word' class="noselect word"></span>
             <span id='prev-word' class="noselect word"></span>
         </div>
+        <div id="play-again-div" style="display: none">
+            <span id="game-over">You win/lose.</span>
+            <button id="play-again-btn"> Play Again </button>
+        </div>
     </div>
     <div id="player-2-div" class="player-div">
         <canvas id="player-2-canvas" class="hangman-canvas"></canvas>
         <span id="player-2-turn" class="turn-indicator"></span>
+        <div class="last-guess-div">
+            <span id="player-2-last-guess" class="noselect last-guess player2"></span>
+        </div>
     </div>
 </div>
 

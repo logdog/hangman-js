@@ -82,6 +82,36 @@ h1 {
     margin-right: 2vw;
 }
 
+#play-again-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 2vh;
+}
+
+#game-over {
+    text-align: center;
+    font-size: 2.5vh;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#game-over.winner {
+    color: green;
+}
+
+#game-over.loser {
+    color: red;
+}
+
+#play-again-btn {
+    margin-left: 0.3vh;
+    height: 100%;
+    font-size: 100%;
+    color: white;
+    background-color: green;
+}
+
 /* div {
     border: 1px solid red;
 } */
@@ -143,6 +173,47 @@ h1 {
     font-size: 3vw;
     font-weight: 400;
 }
+
+.last-guess-div {
+    display: flex;
+    justify-content: center;
+}
+
+.last-guess {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border-radius: 10%;
+    
+    width: 5vw;
+    height: 5vw;
+    font-size: 4vw;
+    margin: 0.5vw;
+    opacity: 0.5;
+}
+
+.last-guess.player1 {
+    background-color: orange;
+}
+
+.last-guess.player2 {
+    background-color: blue;
+}
+
+#whoAmI {
+    /* display: flex; */
+    justify-content: center;
+}
+
+#whoAmI.player1 {
+    color: orange;
+}
+
+#whoAmI.player2 {
+    color: blue;
+}
+
 
 /* Get rid of text selection */
 .noselect {
